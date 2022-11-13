@@ -1,11 +1,11 @@
-# Input: a node-weighted tree T spanning G
-# Output: an annotation of each node of T with a list of markers
-# Initialize all lists to contain the single element 0
-# Call Construct-List for T and its root node S
-from construct_list import cons_list
+#from construct_list import cons_list
 
-
-def build_all_lists(tree, root):
+def build_all_lists(tree, structure):
     for node in tree.nodes():
         tree.nodes[node]['list'] = [0]
-    cons_list(tree, root)
+        if node[0]==len(structure[0]) and node[1]==len(structure[0]):
+            tree.nodes[node]['height'] = 0
+        else: 
+            tree.nodes[node]['height'] = structure[node[0]][node[1]]
+    return tree
+    #cons_list(tree, root)
