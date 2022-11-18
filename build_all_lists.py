@@ -1,5 +1,3 @@
-#from construct_list import cons_list
-
 def build_all_lists(tree, structure):
     for node in tree.nodes():
         tree.nodes[node]['list'] = [0]
@@ -8,4 +6,3 @@ def build_all_lists(tree, structure):
         else: 
             tree.nodes[node]['height'] = structure[node[0]][node[1]]
     return tree
-    #cons_list(tree, root)
