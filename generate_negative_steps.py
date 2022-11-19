@@ -1,31 +1,29 @@
 import networkx as nx
 import pdb
-def gen_neg_steps(tree, root, k, height_map):
-    seq_list = []
-    open_list = []
-    flag = 0
-    for node in nx.dfs_preorder_nodes(tree, root):
-        if node==root:
-            continue
-        depth = nx.shortest_path_length(tree, root, node)
-        if flag==depth:
-            open_list.append(node)
-        elif flag!=depth:
-            open_list.sort(key=lambda x: x[2], reverse=True)
-            seq_list.append(open_list[0])
+def gen_neg_steps(tree, N, super_tree):
+    counter =0
+    if N in tree:
+        if len(list(tree.successors(N)))>1:
+            if N[2]!=max(super_tree.nodes[(N[0], N[1])]['list']):
+                counter+=1
+                print("removing block from", (N[0], N[1]), "to value", N[2])
+                #shortest path from N to root
+                print("reverse of path", nx.shortest_path(tree,tree.graph['root'], N))
             open_list = []
-            open_list.append(node)
-            if len(list(nx.dfs_preorder_nodes(tree, root)))-1 == len(seq_list):
-                seq_list.append(open_list[0])
-            flag = depth
-    if len(seq_list) == 0:
-        return
-    else: 
-        print(seq_list, "seq_list in negative tree")
-    max_value = max(node[2] for node in seq_list)
-    for node in seq_list:
-        if node[2]<max_value:
-            remove_blocks(node, tree, max_value, height_map)
-
-def remove_blocks(node, tree, max_value, height_map):
-    print("remove block at", node, "with value", node[2], "and max value", max_value)
+            for child in tree.successors(N):
+                open_list.append(child)
+            open_list.sort(key=lambda x: x[2], reverse=True)
+            for child in open_list:
+                gen_neg_steps(tree, child, super_tree)                
+        elif len(list(tree.successors(N)))==1:
+            if N[2]!=max(super_tree.nodes[(N[0], N[1])]['list']):
+                counter+=1
+                print("removing block from", (N[0], N[1]), "to value", N[2])
+                print("reverse of path", nx.shortest_path(tree,tree.graph['root'], N))
+            for child in tree.successors(N):
+                gen_neg_steps(tree, child, super_tree)
+        else:
+            if N[2]!=max(super_tree.nodes[(N[0], N[1])]['list']):
+                    counter+=1
+                    print("removing block from", (N[0], N[1]), "to value", N[2])
+                    print("reverse of path", nx.shortest_path(tree,tree.graph['root'], N))

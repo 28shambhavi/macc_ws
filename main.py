@@ -13,17 +13,17 @@ class Node:
         self.children = []
 
 def get_spanning_tree(structure):
-    G = nx.generators.lattice.grid_2d_graph(len(structure[0]), len(structure[0]))
-    H = nx.generators.lattice.grid_2d_graph(len(structure[0]), len(structure[0]))    
+    G = nx.generators.lattice.grid_2d_graph(len(structure), len(structure[0]))
+    H = nx.generators.lattice.grid_2d_graph(len(structure), len(structure[0]))    
     positions2 = {node: node for node in H.nodes()}
-    positions2[(len(structure[0]),len(structure[0]))]=(len(structure[0]),len(structure[0]))
+    positions2[(len(structure),len(structure[0]))]=(len(structure),len(structure[0]))
     for e  in G.edges():
         H.add_edge(e[0], e[1], weight=abs(structure[e[0][0]][e[0][1]]-structure[e[1][0]][e[1][1]])+0.1)
         set = [e[0],e[1]]
         for i in range(len(set)):
             if set[i][0]==0 or set[i][1]==0 or set[i][0]==len(structure[0])-1 or set[i][1]==len(structure[0])-1:     
                 # verify logic here
-                H.add_edge((len(structure[0]),len(structure[0])), set[i],weight=0.1)
+                H.add_edge((len(structure),len(structure[0])), set[i],weight=0.1)
                 
     mst2 = nx.minimum_spanning_edges(H, algorithm='kruskal', data=False)
     edgelists2 = list(mst2)
@@ -56,14 +56,41 @@ def main():
     #             [0,0,1,1,1,1,1,1,0,0],
     #             [0,0,0,0,0,0,0,0,0,0],
     #             [0,0,0,0,0,0,0,0,0,0]]
-    structure = [[1,1,1,1,1],
-                [1,0,0,0,1],
-                [1,0,3,0,1],
-                [1,0,0,0,1],
-                [1,1,1,1,1]]
+    # structure = [[0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,4,4,4,4,4,0,0,0],
+    #             [0,0,0,4,2,2,2,4,0,0,0],
+    #             [0,0,0,4,2,5,2,4,0,0,0],
+    #             [0,0,0,4,2,2,2,4,0,0,0],
+    #             [0,0,0,4,4,4,4,4,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0],
+    #             [0,0,0,0,0,0,0,0,0,0,0]]
+    structure = [[0,0,	0,	0,	0,	0,	0,	0,	0,	0,	0],	
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],	
+                [0,	0,	0,	4,	0,	0,	5,	0,	0,	0,	0],	
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],	
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],	
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],
+                # [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],	
+                # [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0],		
+                [0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0]]
+    # structure = [[4,4,4,4,4],
+    #             [4,2,2,2,4],
+    #             [4,2,5,2,4],
+    #             [4,2,2,2,4],
+    #             [4,4,4,4,4]]
+    # structure = [[1,1,1,1,1],
+    #             [1,0,0,0,1],
+    #             [1,0,3,0,1],
+    #             [1,0,0,0,1],
+    #             [1,1,1,1,1]]
     edge_list = get_spanning_tree(structure)
     tree = nx.DiGraph()
-    tree.graph['root'] = (len(structure[0]),len(structure[0]))
+    tree.graph['root'] = (len(structure),len(structure[0]))
     tree.add_edges_from(edge_list)
     visited_edges = []
     node_queue = []
